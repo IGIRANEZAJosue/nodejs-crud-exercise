@@ -21,14 +21,20 @@ const itemSchema = new mongoose.Schema(
 
 const Item = mongoose.model("Item", itemSchema);
 
-app.get("/", (req, res) => {
+app.get("/items", (req, res) => {
    Item.find()
       .sort({ createdAt: -1 })
       .then((result) => res.status(200).json(result))
       .catch((err) => {
          console.log(err);
          res.status(500).send("Internal server error");
-      });
+      });   
+});
+
+app.get("/items/:id", (req, res) => {
+   Item.findById(req.params.id)
+      .then((result) => res.status(200).json(result))
+      .catch((err) => res.status(500).send("Internal server error"));
 });
 
 app.listen(3000, "localhost", () => {
