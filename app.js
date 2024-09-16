@@ -33,6 +33,16 @@ app.get("/items", (req, res) => {
       });
 });
 
+app.post("/items", async (req, res) => {
+   try {
+      const newItem = new Item(req.body);
+      const addedItem = await newItem.save();
+      res.status(200).json(addedItem);
+   } catch (err) {
+      res.status(500).json({ err: "internal server error" });
+   }
+});
+
 app.get("/items/:id", async (req, res) => {
    try {
       const item = await Item.findById(req.params.id);
