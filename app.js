@@ -12,14 +12,16 @@ mongoose
 
 const itemSchema = new mongoose.Schema(
    {
-      name: String,
-      description: String,
-      price: Number,
+      name: { type: String, required: true },
+      description: { type: String, required: true },
+      price: { type: Number, required: true },
    },
    { timestamps: true }
 );
 
 const Item = mongoose.model("Item", itemSchema);
+
+app.use(express.json());
 
 app.get("/items", (req, res) => {
    Item.find()
