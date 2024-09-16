@@ -31,20 +31,24 @@ app.get("/items", (req, res) => {
       });
 });
 
-app.get("/items/:id", (req, res) => {
-   Item.findById(req.params.id)
-      .then((result) => res.status(200).json(result))
-      .catch((err) => res.status(500).send("Internal server error"));
+app.get("/items/:id", async (req, res) => {
+   try {
+      const item = await Item.findById(req.params.id);
+      if (!item) res.status(404).json({ error: "Item not found" });
+      res.status(200).json(item);
+   } catch (err) {
+      console.log(err);
+      res.status(500).json({ error: "Internal server error" });
+   }
 });
 
 app.delete("/items/:id", async (req, res) => {
    try {
       const deletedItem = await Item.findByIdAndDelete(req.params.id);
-      if (!deletedItem) res.status(404).send("Item not found");
       res.status(200).send(deletedItem);
    } catch (err) {
       console.log(err);
-      res.status(500).send("Internal server error")
+      res.status(500).send("Internal server error");
    }
 });
 
