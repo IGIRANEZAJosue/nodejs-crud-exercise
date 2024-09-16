@@ -28,13 +28,24 @@ app.get("/items", (req, res) => {
       .catch((err) => {
          console.log(err);
          res.status(500).send("Internal server error");
-      });   
+      });
 });
 
 app.get("/items/:id", (req, res) => {
    Item.findById(req.params.id)
       .then((result) => res.status(200).json(result))
       .catch((err) => res.status(500).send("Internal server error"));
+});
+
+app.delete("/items/:id", async (req, res) => {
+   try {
+      const deletedItem = await Item.findByIdAndDelete(req.params.id);
+      if (!deletedItem) res.status(404).send("Item not found");
+      res.status(200).send(deletedItem);
+   } catch (err) {
+      console.log(err);
+      res.status(500).send("Internal server error")
+   }
 });
 
 app.listen(3000, "localhost", () => {
