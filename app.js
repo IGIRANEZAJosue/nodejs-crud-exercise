@@ -68,6 +68,7 @@ app.put("/items/:id", async (req, res) => {
 app.delete("/items/:id", async (req, res) => {
    try {
       const deletedItem = await Item.findByIdAndDelete(req.params.id);
+      if (!deletedItem) res.status(404).send("Item to be deleted not found");
       res.status(200).send(deletedItem);
    } catch (err) {
       console.log(err);
