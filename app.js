@@ -54,6 +54,17 @@ app.get("/items/:id", async (req, res) => {
    }
 });
 
+app.put("/items/:id", async (req, res) => {
+   try {
+      const id = req.params.id;
+      const updatedItem = await Item.findByIdAndUpdate(id, req.body);
+      if (!updatedItem) res.status(404).send("Item not found");
+      res.status(200).json(updatedItem);
+   } catch (err) {
+      res.status(500).josn({ error: "Internal server error" });
+   }
+});
+
 app.delete("/items/:id", async (req, res) => {
    try {
       const deletedItem = await Item.findByIdAndDelete(req.params.id);
